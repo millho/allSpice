@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
+using server.Repositories;
+using server.Services;
 
 namespace allSpice;
 
@@ -33,6 +35,15 @@ public class Startup
 
     services.AddScoped<AccountsRepository>();
     services.AddScoped<AccountService>();
+
+    services.AddScoped<RecipeRepository>();
+    services.AddScoped<RecipeService>();
+
+    services.AddScoped<IngredientRepository>();
+    services.AddScoped<IngredientService>();
+
+    services.AddScoped<FavoriteRepository>();
+    services.AddScoped<FavoriteService>();
   }
 
   private void ConfigureCors(IServiceCollection services)
