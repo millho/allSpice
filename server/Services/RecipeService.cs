@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using server.Models;
 using server.Repositories;
 
 namespace server.Services
@@ -12,6 +13,18 @@ namespace server.Services
         public RecipeService(RecipeRepository repo)
         {
             _repo = repo;
+        }
+
+        internal Recipe Create(Recipe recipe)
+        {
+            Recipe newRecipe = _repo.Create(recipe);
+            return newRecipe;
+        }
+
+        internal List<Recipe> Get()
+        {
+            List<Recipe> recipes = _repo.Get();
+            return recipes;
         }
     }
 }

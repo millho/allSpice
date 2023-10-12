@@ -1,3 +1,4 @@
+using server.Models;
 using server.Services;
 
 namespace server.Controllers
@@ -12,6 +13,37 @@ namespace server.Controllers
         {
             _recipeService = service;
             _auth = auth;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<Recipe>> Create([FromBody] Recipe recipe)
+        {
+            try
+            {
+                Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
+                recipe.CreatorId = userInfo.Id;
+                Recipe newRecipe = _recipeService.Create(recipe);
+                return newRecipe;
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<List<Recipe>> Get()
+        {
+            try
+            {
+                List<Recipe> recipes = _recipeService.Get();
+                return recipes;
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
         }
     }
 }
