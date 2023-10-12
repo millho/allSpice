@@ -35,6 +35,10 @@ namespace server.Repositories
         internal List<Recipe> Get()
         {
             string sql = @"
+            SELECT
+            acc.*, rec.*
+            FROM recipes rec
+            JOIN accounts acc ON acc.id = rec.creatorId
             ;";
             List<Recipe> recipes = _db.Query<Account, Recipe, Recipe>(sql, (account, recipe) =>
             {
