@@ -32,6 +32,7 @@ namespace server.Services
         internal Ingredient Get(int ingredientId)
         {
             Ingredient ingredient = _repo.Get(ingredientId);
+            if (ingredient == null) throw new Exception($"Ingredient not found (id:{ingredientId})");
             return ingredient;
         }
 

@@ -38,7 +38,7 @@ namespace server.Controllers
             {
                 Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
                 string message = _ingredientService.Archive(ingredientId, userInfo.Id);
-                return message;
+                return Ok(message);
             }
             catch (Exception err)
             {
