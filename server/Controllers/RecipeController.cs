@@ -24,7 +24,7 @@ namespace server.Controllers
                 Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
                 recipe.CreatorId = userInfo.Id;
                 Recipe newRecipe = _recipeService.Create(recipe);
-                return newRecipe;
+                return Ok(newRecipe);
             }
             catch (Exception err)
             {
@@ -38,7 +38,55 @@ namespace server.Controllers
             try
             {
                 List<Recipe> recipes = _recipeService.Get();
-                return recipes;
+                return Ok(recipes);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [HttpGet("{recipeId}")]
+        public ActionResult<Recipe> Get(int recipeId)
+        {
+            try
+            {
+                Recipe recipe = _recipeService.Get(recipeId);
+                return Ok(recipe);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("{recipeId}")]
+        public async Task<ActionResult<string>> Archive(int recipeId)
+        {
+            try
+            {
+                Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
+                string message = _recipeService.Archive(recipeId, userInfo.Id);
+                return Ok(message);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("{recipeId}")]
+        public async Task<ActionResult<Recipe>> Edit([FromBody] Recipe recipeData, int recipeId)
+        {
+            try
+            {
+                Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
+                recipeData.Id = recipeId;
+                recipeData.CreatorId = userInfo.Id;
+                Recipe recipe = _recipeService.Edit(recipeData);
+                return Ok(recipe);
             }
             catch (Exception err)
             {
