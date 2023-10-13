@@ -8,10 +8,14 @@ namespace server.Controllers
     public class RecipeController : ControllerBase
     {
         private readonly RecipeService _recipeService;
+        private readonly IngredientService _ingredientService;
+        private readonly FavoriteService _favoriteService;
         private readonly Auth0Provider _auth;
-        public RecipeController(RecipeService service, Auth0Provider auth)
+        public RecipeController(RecipeService recipeService, Auth0Provider auth, IngredientService ingredientService, FavoriteService favoriteService)
         {
-            _recipeService = service;
+            _recipeService = recipeService;
+            _ingredientService = ingredientService;
+            _favoriteService = favoriteService;
             _auth = auth;
         }
 
@@ -53,6 +57,20 @@ namespace server.Controllers
             {
                 Recipe recipe = _recipeService.Get(recipeId);
                 return Ok(recipe);
+            }
+            catch (Exception err)
+            {
+                return BadRequest(err.Message);
+            }
+        }
+
+        [HttpGet("{recipeId}/ingredients")]
+        public ActionResult<List<Ingredient>> GetIngredients(int recipeId)
+        {
+            try
+            {
+                List<Ingredient> ingredients = _ingredientService.GetIngredients(recipeId);
+                return Ok(ingredients);
             }
             catch (Exception err)
             {

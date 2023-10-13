@@ -36,7 +36,7 @@ namespace server.Services
             Recipe recipe = this.Get(recipeId);
             if (recipe.CreatorId != userId) throw new Exception("Unauthorized");
             _repo.Archive(recipeId);
-            return $"Recipe Archived (id:{recipeId})";
+            return $"Recipe archived (id:{recipeId})";
         }
 
         internal Recipe Edit(Recipe recipeData)
