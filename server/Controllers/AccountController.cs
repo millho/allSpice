@@ -1,3 +1,6 @@
+using System.Runtime.CompilerServices;
+using server.Models;
+
 namespace allSpice.Controllers;
 
 [ApiController]
@@ -21,6 +24,22 @@ public class AccountController : ControllerBase
     {
       Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
       return Ok(_accountService.GetOrCreateProfile(userInfo));
+    }
+    catch (Exception e)
+    {
+      return BadRequest(e.Message);
+    }
+  }
+
+  [Authorize]
+  [HttpGet("favorites")]
+  public async Task<ActionResult<List<Recipe>>> GetFavorites()
+  {
+    try
+    {
+      Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
+
+      return Ok();
     }
     catch (Exception e)
     {

@@ -27,5 +27,26 @@ namespace server.Repositories
             Favorite favorite = _db.Query<Favorite>(sql, favoriteData).FirstOrDefault();
             return favorite;
         }
+
+        internal Favorite Get(int favoriteId)
+        {
+            string sql = @"
+            SELECT *
+            FROM favorites
+            WHERE id = @favoriteId
+            ;";
+            Favorite favorite = _db.Query<Favorite>(sql, new { favoriteId }).FirstOrDefault();
+            return favorite;
+        }
+
+        internal void Archive(int favoriteId)
+        {
+            string sql = @"
+            DELETE
+            FROM favorites
+            WHERE id = @favoriteId
+            ;";
+            _db.Execute(sql, new { favoriteId });
+        }
     }
 }

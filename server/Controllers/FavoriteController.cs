@@ -24,7 +24,7 @@ namespace server.Controllers
                 Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
                 favoriteData.AccountId = userInfo.Id;
                 Favorite favorite = _favoriteService.Create(favoriteData);
-                return favorite;
+                return Ok(favorite);
             }
             catch (Exception err)
             {
@@ -39,8 +39,8 @@ namespace server.Controllers
             try
             {
                 Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
-                string message = _favoriteService.Archive(favoriteId);
-                return message;
+                string message = _favoriteService.Archive(favoriteId, userInfo.Id);
+                return Ok(message);
             }
             catch (Exception err)
             {

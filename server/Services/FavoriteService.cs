@@ -20,5 +20,20 @@ namespace server.Services
             Favorite newFavorite = _repo.Create(favoriteData);
             return newFavorite;
         }
+
+        internal Favorite Get(int favoriteId)
+        {
+            Favorite favorite = _repo.Get(favoriteId);
+            if (favorite == null) throw new Exception($"Favorite not found (id:{favoriteId})");
+            return favorite;
+        }
+
+        internal string Archive(int favoriteId, string userId)
+        {
+            Favorite favorite = this.Get(favoriteId);
+            if (favorite.AccountId != userId) throw new Exception("Unauthorized");
+            _repo.Archive(favoriteId);
+            return $"Favorite archived (id:{favoriteId})";
+        }
     }
 }
