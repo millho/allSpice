@@ -1,7 +1,7 @@
 <template>
   <section class="row">
-    <div class="col-4">
-      {{ recipes }}
+    <div class="col-12 col-md-4 px-md-4 g-3" v-for="recipe in recipes" :key="recipe.id">
+      <RecipeCard :recipe="recipe" />
     </div>
   </section>
 </template>
