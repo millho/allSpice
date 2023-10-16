@@ -5,12 +5,14 @@
   <main class="container-fluid">
     <router-view />
   </main>
+  <DetailsModal />
 </template>
 
 <script>
 import { computed } from 'vue'
 import { AppState } from './AppState'
 import Navbar from './components/Navbar.vue'
+import DetailsModal from './components/DetailsModal.vue'
 
 export default {
   setup() {
@@ -18,7 +20,7 @@ export default {
       appState: computed(() => AppState)
     }
   },
-  components: { Navbar }
+  components: { Navbar, DetailsModal }
 }
 </script>
 <style lang="scss">
