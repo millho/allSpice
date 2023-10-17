@@ -3,11 +3,11 @@
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitleId">Modal title</h5>
+                    <h5 class="modal-title" id="modalTitleId">{{ recipe.title }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body container">
-                    {{ recipe.title }}
+                    {{ recipe.instructions }}
                     <section class="row">
                         <button @click="favoriteRecipe()" v-if="account.id == recipe.creatorId"
                             class="col btn btn-success">Favorite Recipe</button>
@@ -25,6 +25,7 @@ import { computed } from 'vue';
 import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
 import { RecipeService } from '../services/RecipeService';
+import { FavoriteService } from '../services/FavoriteService';
 
 
 export default {
@@ -35,7 +36,12 @@ export default {
             account: computed(() => AppState.account),
 
             async favoriteRecipe() {
-
+                try {
+                    const favorite = { recipeId: AppState.activeRecipe.id }
+                    await FavoriteService.favoriteRecipe(favorite)
+                } catch (error) {
+                    Pop.error(error)
+                }
             },
 
             async deleteRecipe() {
