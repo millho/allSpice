@@ -9,13 +9,13 @@
 <script>
 import Pop from '../utils/Pop';
 import { RecipeService } from '../services/RecipeService';
-import { computed, onMounted } from 'vue';
+import { computed, watchEffect } from 'vue';
 import { AppState } from '../AppState';
 
 export default {
   setup() {
 
-    onMounted(() => {
+    watchEffect(() => {
       getRecipes();
     })
 

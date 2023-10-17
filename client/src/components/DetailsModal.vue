@@ -11,8 +11,8 @@
                     <section class="row">
                         <button @click="favoriteRecipe()" v-if="account.id == recipe.creatorId"
                             class="col btn btn-success">Favorite Recipe</button>
-                        <button @click="deleteRecipe()" v-if="account.id == recipe.creatorId"
-                            class="col btn btn-danger">Delete Recipe</button>
+                        <button @click="deleteRecipe()" v-if="account.id == recipe.creatorId" class="col btn btn-danger"
+                            data-bs-toggle="modal" data-bs-target="#recipe-modal">Delete Recipe</button>
                     </section>
                 </div>
             </div>
@@ -24,6 +24,7 @@
 import { computed } from 'vue';
 import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
+import { RecipeService } from '../services/RecipeService';
 
 
 export default {
@@ -39,7 +40,10 @@ export default {
 
             async deleteRecipe() {
                 try {
-
+                    const recipeId = AppState.activeRecipe.id
+                    await Pop.confirm('Delete Recipe?')
+                    await RecipeService.deleteRecipe(recipeId)
+                    Pop.toast('Recipe Deleted', 'success')
                 } catch (error) {
                     Pop.error(error)
                 }
