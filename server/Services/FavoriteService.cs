@@ -28,6 +28,12 @@ namespace server.Services
             return favorite;
         }
 
+        internal List<FavoriteRecipe> GetAccountFavorites(string userId)
+        {
+            List<FavoriteRecipe> recipes = _repo.GetAccountFavorites(userId);
+            return recipes;
+        }
+
         internal string Archive(int favoriteId, string userId)
         {
             Favorite favorite = this.Get(favoriteId);

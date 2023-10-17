@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using server.Models;
+using server.Services;
 
 namespace allSpice.Controllers;
 
@@ -8,11 +9,13 @@ namespace allSpice.Controllers;
 public class AccountController : ControllerBase
 {
   private readonly AccountService _accountService;
+  private readonly FavoriteService _favoriteService;
   private readonly Auth0Provider _auth0Provider;
 
-  public AccountController(AccountService accountService, Auth0Provider auth0Provider)
+  public AccountController(AccountService accountService, Auth0Provider auth0Provider, FavoriteService favoriteService)
   {
     _accountService = accountService;
+    _favoriteService = favoriteService;
     _auth0Provider = auth0Provider;
   }
 
@@ -33,13 +36,13 @@ public class AccountController : ControllerBase
 
   [Authorize]
   [HttpGet("favorites")]
-  public async Task<ActionResult<List<Recipe>>> GetFavorites()
+  public async Task<ActionResult<List<FavoriteRecipe>>> GetFavorites()
   {
     try
     {
       Account userInfo = await _auth0Provider.GetUserInfoAsync<Account>(HttpContext);
-
-      return Ok();
+      List<FavoriteRecipe> recipes = _favoriteService.GetAccountFavorites(userInfo.Id);
+      return Ok(recipes);
     }
     catch (Exception e)
     {

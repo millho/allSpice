@@ -10,4 +10,10 @@ namespace server.Models
         public string CreatorId { get; set; }
         public Account Creator { get; set; }
     }
+
+    public class FavoriteRecipe : Recipe
+    {
+        public int FavoriteId { get; set; }
+        public string AccountId { get; set; }
+    }
 }

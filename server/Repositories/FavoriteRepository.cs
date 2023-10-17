@@ -39,6 +39,23 @@ namespace server.Repositories
             return favorite;
         }
 
+        internal List<FavoriteRecipe> GetAccountFavorites(string userId)
+        {
+            string sql = @"
+            SELECT *
+            FROM favorites
+            JOIN recipes ON recipes.id = favorites.recipeId
+            WHERE favorites.accountId = @userId
+            ;";
+            List<FavoriteRecipe> recipes = _db.Query<Favorite, FavoriteRecipe, FavoriteRecipe>(sql, (favorite, recipe) =>
+            {
+                recipe.FavoriteId = favorite.Id;
+                recipe.AccountId = favorite.AccountId;
+                return recipe;
+            }, new { userId }).ToList();
+            return recipes;
+        }
+
         internal void Archive(int favoriteId)
         {
             string sql = @"
