@@ -9,8 +9,15 @@
                 <div class="modal-body container">
                     {{ recipe.instructions }}
                     <section class="row">
+                        <div class="col-12" v-for="ingredient in ingredients" :key="ingredient.id">
+                            <IngredientCard :ingredient="ingredient" />
+                        </div>
+                    </section>
+                    <section class="row">
                         <button @click="favoriteRecipe()" v-if="account.id == recipe.creatorId"
                             class="col btn btn-success">Favorite Recipe</button>
+                        <button @click="editRecipe()" v-if="account.id == recipe.creatorId" class="col btn btn-primary">Edit
+                            Recipe</button>
                         <button @click="deleteRecipe()" v-if="account.id == recipe.creatorId" class="col btn btn-danger"
                             data-bs-toggle="modal" data-bs-target="#recipe-modal">Delete Recipe</button>
                     </section>
@@ -26,6 +33,7 @@ import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
 import { RecipeService } from '../services/RecipeService';
 import { FavoriteService } from '../services/FavoriteService';
+import IngredientCard from './IngredientCard.vue';
 
 
 export default {
@@ -34,28 +42,36 @@ export default {
         return {
             recipe: computed(() => AppState.activeRecipe),
             account: computed(() => AppState.account),
+            ingredients: computed(() => AppState.ingredients),
 
             async favoriteRecipe() {
                 try {
-                    const favorite = { recipeId: AppState.activeRecipe.id }
-                    await FavoriteService.favoriteRecipe(favorite)
-                } catch (error) {
-                    Pop.error(error)
+                    const favorite = { recipeId: AppState.activeRecipe.id };
+                    await FavoriteService.favoriteRecipe(favorite);
+                }
+                catch (error) {
+                    Pop.error(error);
                 }
             },
 
             async deleteRecipe() {
                 try {
-                    const recipeId = AppState.activeRecipe.id
-                    await Pop.confirm('Delete Recipe?')
-                    await RecipeService.deleteRecipe(recipeId)
-                    Pop.toast('Recipe Deleted', 'success')
-                } catch (error) {
-                    Pop.error(error)
+                    const recipeId = AppState.activeRecipe.id;
+                    await Pop.confirm('Delete Recipe?');
+                    await RecipeService.deleteRecipe(recipeId);
+                    Pop.toast('Recipe Deleted', 'success');
                 }
-            }
+                catch (error) {
+                    Pop.error(error);
+                }
+            },
+
+            async editRecipe() {
+
+            },
         };
     },
+    components: { IngredientCard }
 };
 
 

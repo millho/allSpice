@@ -16,15 +16,27 @@
 import { Recipe } from '../models/Recipe';
 import { RecipeService } from '../services/RecipeService';
 import Pop from '../utils/Pop';
+import { IngredientService } from '../services/IngredientService'
 
 export default {
     props: { recipe: { type: Recipe, required: true } },
     setup(props) {
+
         return {
             async getRecipe() {
                 try {
                     const recipeId = props.recipe.id
+                    this.getIngredients()
                     await RecipeService.getRecipe(recipeId)
+                } catch (error) {
+                    Pop.error(error)
+                }
+            },
+
+            async getIngredients() {
+                try {
+                    const recipeId = props.recipe.id
+                    await IngredientService.getIngredients(recipeId)
                 } catch (error) {
                     Pop.error(error)
                 }
